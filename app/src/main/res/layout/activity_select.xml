@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    tools:context=".SelectActivity">
+
+    <Button
+        android:id="@+id/LaundryReservation"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginLeft="50dp"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:text="Laundry\nReservation"
+        android:backgroundTint="#03A9F4"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/MyCurrentLaundry"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="MY\nCURRENT\nLAUNDRY"
+        android:layout_marginLeft="10dp"
+        android:textSize="20sp"
+        android:backgroundTint="#2196F3"/>
+</LinearLayout>

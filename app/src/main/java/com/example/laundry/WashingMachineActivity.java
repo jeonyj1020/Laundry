@@ -1,19 +1,27 @@
 package com.example.laundry;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.Chronometer;
+import android.widget.DatePicker;
 import android.widget.RadioButton;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class WashingMachineActivity extends AppCompatActivity {
 
@@ -24,11 +32,26 @@ public class WashingMachineActivity extends AppCompatActivity {
     Chronometer chrono;
     Button btnStart, btnEnd;
     RadioButton rBtnCalendar, rBtnTime;
-    CalendarView calView;
+    DatePicker datePicker;
     TimePicker tPicker;
-    int selectYear, selectMonth, selectDay;
+    //default값은 오늘로 설정
 
+    Date currentTime = Calendar.getInstance().getTime();
 
+    SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy", Locale.getDefault());
+    SimpleDateFormat monthFormat = new SimpleDateFormat("MM", Locale.getDefault());
+    SimpleDateFormat dayFormat = new SimpleDateFormat("dd",Locale.getDefault());
+
+    String selectyear = yearFormat.format(currentTime);
+    String selectmonth= monthFormat.format(currentTime);
+    //int selectYear, selectMonth , selectDay;
+    String selectday = dayFormat.format(currentTime);
+
+    int selectYear = Integer.parseInt(selectyear);
+    int selectMonth = Integer.parseInt(selectmonth);
+    int selectDay = Integer.parseInt(selectday);
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,17 +66,17 @@ public class WashingMachineActivity extends AppCompatActivity {
         rBtnTime =(RadioButton)findViewById(R.id.rBtnTime);
 
         tPicker = (TimePicker)findViewById(R.id.timePicker);
-        calView = (CalendarView)findViewById(R.id.calendarView);
+        datePicker = (DatePicker)findViewById(R.id.datePicker);
 
         tPicker.setVisibility(View.INVISIBLE);
-        calView.setVisibility(View.INVISIBLE);
+        datePicker.setVisibility(View.INVISIBLE);
 
         rBtnCalendar.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View view) {
                 tPicker.setVisibility(View.INVISIBLE);
-                calView.setVisibility(View.VISIBLE);
+                datePicker.setVisibility(View.VISIBLE);
             }
         });
 
@@ -62,7 +85,7 @@ public class WashingMachineActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 tPicker.setVisibility(View.VISIBLE);
-                calView.setVisibility(View.INVISIBLE);
+                datePicker.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -98,15 +121,21 @@ public class WashingMachineActivity extends AppCompatActivity {
 
         });
 
-        calView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+        //오늘과 내일만 선택 가능하도록 수정
+
+        datePicker.setMinDate(System.currentTimeMillis());
+        datePicker.setMaxDate(System.currentTimeMillis()+86400000);
+
+        datePicker.setOnDateChangedListener(new DatePicker.OnDateChangedListener() {
             @Override
-            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
+            public void onDateChanged(DatePicker datePicker, int year, int month, int dayOfMonth) {
                 selectYear =year;
                 selectMonth =month + 1;
                 selectDay = dayOfMonth;
             }
         });
 
+        //알람 앱으로 바로 이동
         to_alarm = (Button)findViewById(R.id.to_alarm);
         Intent intent = this.getPackageManager().getLaunchIntentForPackage(packageName);
         to_alarm.setOnClickListener(new View.OnClickListener() {
